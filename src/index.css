@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg:       #0a0a0a;
+    --surface:  rgba(255,255,255,0.03);
+    --border:   rgba(255,255,255,0.07);
+    --yellow:   #F4C430;
+    --yellow2:  #E0A800;
+    --silver:   #C8C8C8;
+    --silver2:  #888888;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body, #root { height: 100%; margin: 0; }
+
+  body {
+    background-color: var(--bg);
+    color: rgba(255,255,255,0.88);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(244,196,48,0.2); border-radius: 2px; }
+}
+
+@layer components {
+  /* Glass card — charcoal surface */
+  .glass {
+    background: rgba(18,18,18,0.85);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 1rem;
+  }
+
+  .glass-hover {
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .glass-hover:hover {
+    box-shadow: 0 0 32px rgba(244,196,48,0.10);
+    border-color: rgba(244,196,48,0.25);
+  }
+
+  /* Gold gradient text */
+  .grad-text {
+    background: linear-gradient(135deg, var(--yellow), #fff 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gold/silver button */
+  .btn-grad {
+    position: relative;
+    background: linear-gradient(135deg, var(--yellow), var(--yellow2));
+    color: #0a0a0a;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.625rem;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .btn-grad:hover {
+    opacity: 0.92;
+    box-shadow: 0 0 28px rgba(244,196,48,0.40);
+  }
+
+  /* Table rows */
+  .dark-row {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+  .dark-row:hover { background: rgba(244,196,48,0.04); }
+  .dark-row:last-child { border-bottom: none; }
+
+  /* Sidebar nav */
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    border-radius: 0.625rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.38);
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-item:hover {
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.04);
+  }
+  .nav-item.active {
+    background: rgba(244,196,48,0.10);
+    color: var(--yellow);
+    border: 1px solid rgba(244,196,48,0.22);
+  }
+  .nav-item.active svg { color: var(--yellow); }
+
+  /* Gold divider */
+  .gold-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244,196,48,0.4), transparent);
+  }
+}
+
+/* FullCalendar dark + gold overrides */
+.fc {
+  --fc-border-color: rgba(255,255,255,0.06);
+  --fc-today-bg-color: rgba(244,196,48,0.07);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: transparent;
+}
+.fc .fc-toolbar-title {
+  color: rgba(255,255,255,0.88);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number {
+  color: rgba(255,255,255,0.3);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: var(--yellow);
+  font-weight: 700;
+}
+.fc .fc-button-primary {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.09) !important;
+  color: rgba(255,255,255,0.6) !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+}
+.fc .fc-button-primary:hover {
+  background: rgba(244,196,48,0.12) !important;
+  border-color: rgba(244,196,48,0.3) !important;
+  color: var(--yellow) !important;
+}
+.fc .fc-button-primary.fc-button-active {
+  background: rgba(244,196,48,0.18) !important;
+  border-color: rgba(244,196,48,0.4) !important;
+  color: var(--yellow) !important;
+}
+.fc .fc-daygrid-event {
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 1px 5px;
+}
+.fc .fc-more-link { color: rgba(244,196,48,0.5); font-size: 0.68rem; }
+
+/* Status pulse */
+@keyframes ring-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(244,196,48,0.5); }
+  50%      { box-shadow: 0 0 0 6px rgba(244,196,48,0); }
+}
+.status-atrasado { animation: ring-pulse 1.5s ease-in-out infinite; }
+
+/* Ambient blobs */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0;
+}
