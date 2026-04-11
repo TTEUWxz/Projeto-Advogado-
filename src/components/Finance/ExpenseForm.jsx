@@ -24,8 +24,12 @@ export default function ExpenseForm({ onClose, onSaved }) {
   const { toast }         = useToast()
 
   useEffect(() => {
-    supabase.from('categorias_gasto').select('*').order('nome').then(({ data }) => setCats(data ?? []))
-  }, [])
+    supabase.from('categorias_gasto').select('*').order('nome')
+      .then(({ data, error }) => {
+        if (error) { toast(error.message, 'error'); return }
+        setCats(data ?? [])
+      })
+  }, [toast])
 
   const set = f => e => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Plus, Users, CheckCircle, XCircle } from 'lucide-react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
+import { Plus, Users } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { formatBRL } from '../lib/calendarEvents'
 import { useToast } from '../context/ToastContext'
+import { useDebounce } from '../lib/hooks'
 import ClientForm from '../components/Clients/ClientForm'
 
 const badge = (bg, color, border, text) => (
@@ -11,35 +12,40 @@ const badge = (bg, color, border, text) => (
 
 export default function Clients() {
   const [clients, setClients]   = useState([])
-  const [filtered, setFiltered] = useState([])
   const [search, setSearch]     = useState('')
   const [loading, setLoading]   = useState(true)
   const [showForm, setShowForm] = useState(false)
   const { toast }               = useToast()
 
-  async function load() {
-    const { data, error } = await supabase.from('clientes').select('*').order('nome')
-    if (error) { toast(error.message, 'error'); return }
-    setClients(data ?? [])
-    setFiltered(data ?? [])
-    setLoading(false)
-  }
-  useEffect(() => { load() }, [])
+  const debouncedSearch = useDebounce(search, 250)
 
-  useEffect(() => {
-    const q = search.toLowerCase()
-    setFiltered(clients.filter(c =>
+  const load = useCallback(async () => {
+    setLoading(true)
+    const { data, error } = await supabase.from('clientes').select('*').order('nome')
+    if (error) { toast(error.message, 'error'); setLoading(false); return }
+    setClients(data ?? [])
+    setLoading(false)
+  }, [toast])
+
+  useEffect(() => { load() }, [load])
+
+  // Memoized filtered list
+  const filtered = useMemo(() => {
+    const q = debouncedSearch.toLowerCase()
+    if (!q) return clients
+    return clients.filter(c =>
       c.nome.toLowerCase().includes(q) ||
       (c.cnpj_cpf ?? '').includes(q) ||
       (c.email ?? '').toLowerCase().includes(q)
-    ))
-  }, [search, clients])
+    )
+  }, [debouncedSearch, clients])
 
   async function toggleActive(client) {
     const { error } = await supabase.from('clientes').update({ ativo: !client.ativo }).eq('id', client.id)
     if (error) { toast(error.message, 'error'); return }
+    // Optimistic update — no need to re-fetch the entire list
+    setClients(prev => prev.map(c => c.id === client.id ? { ...c, ativo: !c.ativo } : c))
     toast(client.ativo ? 'Cliente desativado.' : 'Cliente ativado!', client.ativo ? 'warning' : 'success')
-    load()
   }
 
   return (
@@ -123,7 +129,7 @@ export default function Clients() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && (
+                {filtered.length === 0 && search && (
                   <tr><td colSpan={8} style={{ padding: '32px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
                 )}
               </tbody>

@@ -1,46 +1,56 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Plus, Wallet } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { formatBRL } from '../lib/calendarEvents'
 import { useToast } from '../context/ToastContext'
+import { useDebounce } from '../lib/hooks'
 import ExpenseForm from '../components/Finance/ExpenseForm'
 
 const STATUS = {
-  pendente:  { bg: 'rgba(244,196,48,0.08)', color: '#F4C430',             border: 'rgba(244,196,48,0.2)' },
-  pago:      { bg: 'rgba(34,197,94,0.08)',  color: '#4ade80',             border: 'rgba(34,197,94,0.2)'  },
-  atrasado:  { bg: 'rgba(239,68,68,0.08)',  color: '#f87171',             border: 'rgba(239,68,68,0.2)'  },
+  pendente:  { bg: 'rgba(244,196,48,0.08)', color: '#F4C430',                border: 'rgba(244,196,48,0.2)' },
+  pago:      { bg: 'rgba(34,197,94,0.08)',  color: '#4ade80',                border: 'rgba(34,197,94,0.2)'  },
+  atrasado:  { bg: 'rgba(239,68,68,0.08)',  color: '#f87171',                border: 'rgba(239,68,68,0.2)'  },
   cancelado: { bg: 'rgba(255,255,255,0.03)',color: 'rgba(255,255,255,0.25)', border: 'rgba(255,255,255,0.06)' },
 }
-
 const badge = (s) => {
   const { bg, color, border } = STATUS[s] ?? STATUS.pendente
   return { fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.04em', padding: '3px 10px', borderRadius: 6, display: 'inline-block', background: bg, color, border: `1px solid ${border}` }
 }
 
 export default function Finance() {
-  const [gastos,    setGastos]   = useState([])
-  const [filtered,  setFiltered] = useState([])
-  const [search,    setSearch]   = useState('')
-  const [loading,   setLoading]  = useState(true)
-  const [showForm,  setShowForm] = useState(false)
+  const [gastos,   setGastos]   = useState([])
+  const [search,   setSearch]   = useState('')
+  const [loading,  setLoading]  = useState(true)
+  const [showForm, setShowForm] = useState(false)
   const { toast } = useToast()
 
-  async function load() {
-    const { data, error } = await supabase.from('gastos').select('*, categorias_gasto(nome,tipo)').order('data_vencimento')
-    if (error) { toast(error.message, 'error'); return }
-    setGastos(data ?? [])
-    setFiltered(data ?? [])
-    setLoading(false)
-  }
-  useEffect(() => { load() }, [])
+  const debouncedSearch = useDebounce(search, 250)
 
-  useEffect(() => {
-    const q = search.toLowerCase()
-    setFiltered(gastos.filter(g =>
+  const load = useCallback(async () => {
+    setLoading(true)
+    const { data, error } = await supabase.from('gastos').select('*, categorias_gasto(nome,tipo)').order('data_vencimento')
+    if (error) { toast(error.message, 'error'); setLoading(false); return }
+    setGastos(data ?? [])
+    setLoading(false)
+  }, [toast])
+
+  useEffect(() => { load() }, [load])
+
+  // Memoized filtered list
+  const filtered = useMemo(() => {
+    const q = debouncedSearch.toLowerCase()
+    if (!q) return gastos
+    return gastos.filter(g =>
       g.descricao.toLowerCase().includes(q) ||
       (g.categorias_gasto?.nome ?? '').toLowerCase().includes(q)
-    ))
-  }, [search, gastos])
+    )
+  }, [debouncedSearch, gastos])
+
+  // Memoized total — doesn't recalculate on every render
+  const totalPendente = useMemo(
+    () => gastos.filter(g => g.status === 'pendente').reduce((s, g) => s + (g.valor ?? 0), 0),
+    [gastos]
+  )
 
   async function markPaid(id) {
     const { error } = await supabase.from('gastos').update({ status: 'pago', data_pagamento: new Date().toISOString().slice(0, 10) }).eq('id', id)
@@ -48,8 +58,6 @@ export default function Finance() {
     toast('Pagamento confirmado!', 'success')
     load()
   }
-
-  const totalPendente = gastos.filter(g => g.status === 'pendente').reduce((s, g) => s + (g.valor ?? 0), 0)
 
   return (
     <div className="space-y-6">
@@ -139,6 +147,9 @@ export default function Finance() {
                     </td>
                   </tr>
                 ))}
+                {filtered.length === 0 && search && (
+                  <tr><td colSpan={7} style={{ padding: '28px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
+                )}
               </tbody>
             </table>
           </div>

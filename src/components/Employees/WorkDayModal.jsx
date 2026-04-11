@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { X, Calendar, DollarSign } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useToast } from '../../context/ToastContext'
@@ -12,21 +12,34 @@ export default function WorkDayModal({ employee, onClose }) {
   const [saving, setSaving]   = useState(false)
   const { toast }             = useToast()
 
-  const currentMonth = new Date().toISOString().slice(0, 7)
+  // Correct month range — handles months with less than 31 days
+  const now          = new Date()
+  const monthStart   = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)
+  const monthEnd     = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().slice(0, 10)
+  const monthLabel   = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
-  async function loadDias() {
+  // Close on ESC key
+  useEffect(() => {
+    const handleEsc = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [onClose])
+
+  const loadDias = useCallback(async () => {
+    setLoading(true)
     const { data, error } = await supabase
       .from('registros_trabalho')
       .select('*')
       .eq('funcionario_id', employee.id)
-      .gte('data_trabalho', `${currentMonth}-01`)
-      .lte('data_trabalho', `${currentMonth}-31`)
+      .gte('data_trabalho', monthStart)
+      .lte('data_trabalho', monthEnd)
       .order('data_trabalho', { ascending: false })
-    if (error) { toast(error.message, 'error'); return }
+    if (error) { toast(error.message, 'error'); setLoading(false); return }
     setDias(data ?? [])
     setLoading(false)
-  }
-  useEffect(() => { loadDias() }, [employee.id])
+  }, [employee.id, monthStart, monthEnd, toast])
+
+  useEffect(() => { loadDias() }, [loadDias])
 
   async function register() {
     setSaving(true)
@@ -53,23 +66,26 @@ export default function WorkDayModal({ employee, onClose }) {
     : employee.valor_pagamento
 
   const TURNO_LABEL = { integral: 'Integral', manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
-
-  const fieldStyle = { width: '100%', borderRadius: 7, padding: '8px 10px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', outline: 'none', colorScheme: 'dark' }
+  const fieldStyle = {
+    width: '100%', borderRadius: 7, padding: '8px 10px', fontSize: '0.8rem',
+    color: 'rgba(255,255,255,0.75)', background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.09)', outline: 'none', colorScheme: 'dark',
+  }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '12px',
-    }}>
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 1000,
+        background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '12px',
+      }}
+      onClick={e => { if (e.target === e.currentTarget) onClose() }} // click outside to close
+    >
       <div
         className="glass"
         style={{
-          width: '100%',
-          maxWidth: 520,
-          maxHeight: '92vh',
-          overflowY: 'auto',
+          width: '100%', maxWidth: 520, maxHeight: '92vh', overflowY: 'auto',
           borderColor: 'rgba(244,196,48,0.2)',
           padding: 'clamp(16px, 4vw, 24px)',
         }}
@@ -124,9 +140,11 @@ export default function WorkDayModal({ employee, onClose }) {
 
         {/* Lista do mês */}
         <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 10 }}>
-          Mês Atual — {dias.length} dia(s)
+          {monthLabel} — {loading ? '…' : `${dias.length} dia(s)`}
         </p>
-        {loading ? <div className="animate-pulse" style={{ height: 60, borderRadius: 8, background: 'rgba(255,255,255,0.04)' }} /> : (
+        {loading ? (
+          <div className="animate-pulse" style={{ height: 60, borderRadius: 8, background: 'rgba(255,255,255,0.04)' }} />
+        ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {dias.length === 0 && (
               <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.78rem', padding: '16px 0' }}>Nenhum dia registrado este mês.</p>
@@ -146,7 +164,7 @@ export default function WorkDayModal({ employee, onClose }) {
                   {employee.tipo_pagamento === 'diaria' && (
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#F4C430' }}>{formatBRL(employee.valor_pagamento)}</span>
                   )}
-                  <button onClick={() => removeDia(d.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.5)', fontSize: '0.7rem', fontWeight: 600 }}>✕</button>
+                  <button onClick={() => removeDia(d.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.5)', fontSize: '0.7rem', fontWeight: 600 }} title="Remover">✕</button>
                 </div>
               </div>
             ))}

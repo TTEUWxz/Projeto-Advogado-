@@ -1,40 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Plus, UserCheck, UserX, Users, CalendarDays } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { formatBRL } from '../lib/calendarEvents'
 import { useToast } from '../context/ToastContext'
+import { useDebounce } from '../lib/hooks'
 import EmployeeForm from '../components/Employees/EmployeeForm'
 import WorkDayModal from '../components/Employees/WorkDayModal'
 
 const TIPO = { diaria: 'Diária', semanal: 'Semanal', mensal: 'Mensal' }
-const badge = (bg, color, border) => ({ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.04em', padding: '3px 10px', borderRadius: 6, background: bg, color, border: `1px solid ${border}` })
+const badge = (bg, color, border) => ({
+  display: 'inline-flex', alignItems: 'center', gap: 5,
+  fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.04em',
+  padding: '3px 10px', borderRadius: 6, background: bg, color, border: `1px solid ${border}`,
+})
 
 export default function Employees() {
   const [employees, setEmployees] = useState([])
-  const [filtered,  setFiltered]  = useState([])
   const [search,    setSearch]    = useState('')
   const [loading,   setLoading]   = useState(true)
   const [showForm,  setShowForm]  = useState(false)
   const [workEmp,   setWorkEmp]   = useState(null)
   const { toast } = useToast()
 
-  async function load() {
-    const { data, error } = await supabase.from('funcionarios').select('*').order('nome')
-    if (error) { toast(error.message, 'error'); return }
-    setEmployees(data ?? [])
-    setFiltered(data ?? [])
-    setLoading(false)
-  }
-  useEffect(() => { load() }, [])
+  // Debounce search — avoids filtering on every keystroke
+  const debouncedSearch = useDebounce(search, 250)
 
-  useEffect(() => {
-    const q = search.toLowerCase()
-    setFiltered(employees.filter(e =>
+  const load = useCallback(async () => {
+    setLoading(true)
+    const { data, error } = await supabase.from('funcionarios').select('*').order('nome')
+    if (error) { toast(error.message, 'error'); setLoading(false); return }
+    setEmployees(data ?? [])
+    setLoading(false)
+  }, [toast])
+
+  useEffect(() => { load() }, [load])
+
+  // Memoized filtered list — recalculates only when search or employees change
+  const filtered = useMemo(() => {
+    const q = debouncedSearch.toLowerCase()
+    if (!q) return employees
+    return employees.filter(e =>
       e.nome.toLowerCase().includes(q) ||
       (e.cargo ?? '').toLowerCase().includes(q) ||
       (e.cpf ?? '').includes(q)
-    ))
-  }, [search, employees])
+    )
+  }, [debouncedSearch, employees])
 
   return (
     <div className="space-y-6">

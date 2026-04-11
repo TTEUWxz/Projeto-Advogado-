@@ -110,10 +110,7 @@ export default function Calendar() {
             locale={ptBrLocale}
             headerToolbar={{ left: 'prev,next', center: 'title', right: 'today,listWeek' }}
             events={allEvents.filter(e => filters[e.extendedProps?.type])}
-            datesSet={info => fetchEvents(info, evts => {
-              setAllEvents(evts)
-              calRef.current?.getApi().refetchEvents()
-            })}
+            datesSet={info => fetchEvents(info, evts => setAllEvents(evts))}
             eventClick={info => setSelectedEvent(info.event)}
             dayMaxEvents={2}
             height="auto"
