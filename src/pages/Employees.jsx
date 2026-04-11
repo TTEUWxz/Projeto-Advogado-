@@ -40,12 +40,13 @@ export default function Employees() {
     <div className="space-y-6">
       {workEmp && <WorkDayModal employee={workEmp} onClose={() => setWorkEmp(null)} />}
 
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p style={{ fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 4 }}>Módulo</p>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>Colaboradores</h2>
+          <h2 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', fontWeight: 800, color: '#fff' }}>Colaboradores</h2>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm">
+        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm self-start sm:self-auto">
           <Plus size={14} /> Novo Funcionário
         </button>
       </div>
@@ -70,45 +71,47 @@ export default function Employees() {
         </div>
       ) : (
         <div className="glass overflow-hidden">
-          <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
-                {['Nome', 'Cargo', 'Tipo', 'Valor', 'Admissão', 'Status', ''].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '12px 20px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(emp => (
-                <tr key={emp.id} className="dark-row">
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: '#fff' }}>{emp.nome}</td>
-                  <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.35)' }}>{emp.cargo ?? '—'}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <span style={badge('rgba(244,196,48,0.08)', '#F4C430', 'rgba(244,196,48,0.2)')}>{TIPO[emp.tipo_pagamento]}</span>
-                  </td>
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>{formatBRL(emp.valor_pagamento)}</td>
-                  <td style={{ padding: '14px 20px', fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)' }}>{new Date(emp.data_admissao).toLocaleDateString('pt-BR')}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    {emp.ativo
-                      ? <span style={badge('rgba(34,197,94,0.08)', '#4ade80', 'rgba(34,197,94,0.2)')}><UserCheck size={10} />Ativo</span>
-                      : <span style={badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.08)')}><UserX size={10} />Inativo</span>
-                    }
-                  </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <button
-                      onClick={() => setWorkEmp(emp)}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: '0.72rem', fontWeight: 600, color: '#F4C430', background: 'rgba(244,196,48,0.08)', border: '1px solid rgba(244,196,48,0.18)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}
-                    >
-                      <CalendarDays size={11} /> Ponto
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
+                  {['Nome', 'Cargo', 'Tipo', 'Valor', 'Admissão', 'Status', ''].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)', whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-              {filtered.length === 0 && (
-                <tr><td colSpan={7} style={{ padding: '28px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map(emp => (
+                  <tr key={emp.id} className="dark-row">
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>{emp.nome}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{emp.cargo ?? '—'}</td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <span style={badge('rgba(244,196,48,0.08)', '#F4C430', 'rgba(244,196,48,0.2)')}>{TIPO[emp.tipo_pagamento]}</span>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: 'rgba(255,255,255,0.8)', whiteSpace: 'nowrap' }}>{formatBRL(emp.valor_pagamento)}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>{new Date(emp.data_admissao).toLocaleDateString('pt-BR')}</td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      {emp.ativo
+                        ? <span style={badge('rgba(34,197,94,0.08)', '#4ade80', 'rgba(34,197,94,0.2)')}><UserCheck size={10} />Ativo</span>
+                        : <span style={badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.08)')}><UserX size={10} />Inativo</span>
+                      }
+                    </td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <button
+                        onClick={() => setWorkEmp(emp)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: '0.72rem', fontWeight: 600, color: '#F4C430', background: 'rgba(244,196,48,0.08)', border: '1px solid rgba(244,196,48,0.18)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}
+                      >
+                        <CalendarDays size={11} /> Ponto
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filtered.length === 0 && (
+                  <tr><td colSpan={7} style={{ padding: '28px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

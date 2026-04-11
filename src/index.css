@@ -177,3 +177,31 @@
   pointer-events: none;
   z-index: 0;
 }
+
+/* FullCalendar — mobile overrides */
+@media (max-width: 640px) {
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start !important;
+  }
+  .fc .fc-toolbar-title {
+    font-size: 0.95rem !important;
+  }
+  .fc .fc-button-primary {
+    padding: 4px 8px !important;
+    font-size: 0.72rem !important;
+  }
+  .fc .fc-col-header-cell-cushion,
+  .fc .fc-daygrid-day-number {
+    font-size: 0.72rem !important;
+  }
+  .fc .fc-event-title,
+  .fc .fc-event-time {
+    font-size: 0.65rem !important;
+  }
+}
+
+/* Prevent horizontal overflow on all pages */
+* { box-sizing: border-box; }
+

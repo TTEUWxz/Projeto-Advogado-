@@ -48,20 +48,32 @@ export default function WorkDayModal({ employee, onClose }) {
     loadDias()
   }
 
-  // Calcular valor estimado do mês
   const valorEstimado = employee.tipo_pagamento === 'diaria'
     ? dias.length * employee.valor_pagamento
     : employee.valor_pagamento
 
   const TURNO_LABEL = { integral: 'Integral', manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
 
+  const fieldStyle = { width: '100%', borderRadius: 7, padding: '8px 10px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', outline: 'none', colorScheme: 'dark' }
+
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '12px',
     }}>
-      <div className="glass p-6" style={{ width: '100%', maxWidth: 520, borderColor: 'rgba(244,196,48,0.2)', maxHeight: '90vh', overflowY: 'auto' }}>
+      <div
+        className="glass"
+        style={{
+          width: '100%',
+          maxWidth: 520,
+          maxHeight: '92vh',
+          overflowY: 'auto',
+          borderColor: 'rgba(244,196,48,0.2)',
+          padding: 'clamp(16px, 4vw, 24px)',
+        }}
+      >
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
           <div>
@@ -71,14 +83,14 @@ export default function WorkDayModal({ employee, onClose }) {
               {employee.cargo ?? 'Sem cargo'} · {employee.tipo_pagamento === 'diaria' ? `${formatBRL(employee.valor_pagamento)}/dia` : `${formatBRL(employee.valor_pagamento)}/mês`}
             </p>
           </div>
-          <button onClick={onClose} style={{ padding: 5, borderRadius: 7, background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer' }}>
+          <button onClick={onClose} style={{ padding: 5, borderRadius: 7, background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
             <X size={14} style={{ color: 'rgba(255,255,255,0.4)' }} />
           </button>
         </div>
 
         {/* Valor estimado */}
         <div style={{ background: 'rgba(244,196,48,0.07)', border: '1px solid rgba(244,196,48,0.18)', borderRadius: 10, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <DollarSign size={16} style={{ color: '#F4C430' }} />
+          <DollarSign size={16} style={{ color: '#F4C430', flexShrink: 0 }} />
           <div>
             <p style={{ fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(244,196,48,0.5)' }}>
               {employee.tipo_pagamento === 'diaria' ? `${dias.length} dia(s) × ${formatBRL(employee.valor_pagamento)}` : 'Salário mensal fixo'}
@@ -90,16 +102,14 @@ export default function WorkDayModal({ employee, onClose }) {
         {/* Registrar novo dia */}
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, padding: '14px 16px', marginBottom: 20 }}>
           <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>Registrar Dia</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
             <div>
               <label style={{ display: 'block', fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', marginBottom: 5 }}>DATA</label>
-              <input type="date" value={date} onChange={e => setDate(e.target.value)}
-                style={{ width: '100%', borderRadius: 7, padding: '8px 10px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', outline: 'none', colorScheme: 'dark' }} />
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} style={fieldStyle} />
             </div>
             <div>
               <label style={{ display: 'block', fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', marginBottom: 5 }}>TURNO</label>
-              <select value={turno} onChange={e => setTurno(e.target.value)}
-                style={{ width: '100%', borderRadius: 7, padding: '8px 10px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', outline: 'none', colorScheme: 'dark' }}>
+              <select value={turno} onChange={e => setTurno(e.target.value)} style={fieldStyle}>
                 <option value="integral">Integral</option>
                 <option value="manha">Manhã</option>
                 <option value="tarde">Tarde</option>
@@ -122,20 +132,22 @@ export default function WorkDayModal({ employee, onClose }) {
               <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.78rem', padding: '16px 0' }}>Nenhum dia registrado este mês.</p>
             )}
             {dias.map(d => (
-              <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Calendar size={13} style={{ color: '#F4C430' }} />
-                  <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+              <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                  <Calendar size={13} style={{ color: '#F4C430', flexShrink: 0 }} />
+                  <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, whiteSpace: 'nowrap' }}>
                     {new Date(d.data_trabalho + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })}
                   </span>
-                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.05)', padding: '2px 7px', borderRadius: 4 }}>
+                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.05)', padding: '2px 7px', borderRadius: 4, whiteSpace: 'nowrap' }}>
                     {TURNO_LABEL[d.turno] ?? d.turno}
                   </span>
                 </div>
-                {employee.tipo_pagamento === 'diaria' && (
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#F4C430' }}>{formatBRL(employee.valor_pagamento)}</span>
-                )}
-                <button onClick={() => removeDia(d.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.5)', fontSize: '0.7rem', fontWeight: 600 }}>✕</button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                  {employee.tipo_pagamento === 'diaria' && (
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#F4C430' }}>{formatBRL(employee.valor_pagamento)}</span>
+                  )}
+                  <button onClick={() => removeDia(d.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.5)', fontSize: '0.7rem', fontWeight: 600 }}>✕</button>
+                </div>
               </div>
             ))}
           </div>

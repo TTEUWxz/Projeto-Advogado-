@@ -41,7 +41,7 @@ export default function ClientForm({ onClose, onSaved }) {
   }
 
   return (
-    <div className="glass p-6" style={{ borderColor: 'rgba(244,196,48,0.15)' }}>
+    <div className="glass p-5 sm:p-6" style={{ borderColor: 'rgba(244,196,48,0.15)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <p style={{ fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 3 }}>Cadastro</p>
@@ -52,7 +52,7 @@ export default function ClientForm({ onClose, onSaved }) {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Field label="Nome *"         value={form.nome}           onChange={set('nome')}           required placeholder="Nome ou razão social" />
         <Field label="CPF / CNPJ"     value={form.cnpj_cpf}       onChange={set('cnpj_cpf')}       placeholder="000.000.000-00" />
         <Field label="Telefone"       value={form.telefone}       onChange={set('telefone')}       placeholder="(00) 00000-0000" />
@@ -60,7 +60,7 @@ export default function ClientForm({ onClose, onSaved }) {
         <Field label="Dia de Venc."   value={form.dia_vencimento} onChange={set('dia_vencimento')} type="number" min="1" max="31" placeholder="Ex: 10" />
         <Field label="Valor do Contrato (R$)" value={form.valor_contrato} onChange={set('valor_contrato')} type="number" step="0.01" placeholder="0,00" />
 
-        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="col-span-1 sm:col-span-2 flex items-center gap-3">
           <button
             type="button"
             onClick={() => setForm(p => ({ ...p, recorrente: !p.recorrente }))}
@@ -77,7 +77,7 @@ export default function ClientForm({ onClose, onSaved }) {
           <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)' }}>Pagamento recorrente mensal</span>
         </div>
 
-        <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', gap: 10, paddingTop: 6 }}>
+        <div className="col-span-1 sm:col-span-2 flex justify-end gap-2.5 pt-2">
           <button type="button" onClick={onClose}
             style={{ padding: '8px 16px', borderRadius: 8, fontSize: '0.8rem', background: 'none', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}>
             Cancelar

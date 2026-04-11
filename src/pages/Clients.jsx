@@ -6,7 +6,7 @@ import { useToast } from '../context/ToastContext'
 import ClientForm from '../components/Clients/ClientForm'
 
 const badge = (bg, color, border, text) => (
-  <span style={{ fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: 6, background: bg, color, border: `1px solid ${border}` }}>{text}</span>
+  <span style={{ fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: 6, background: bg, color, border: `1px solid ${border}`, whiteSpace: 'nowrap' }}>{text}</span>
 )
 
 export default function Clients() {
@@ -44,12 +44,13 @@ export default function Clients() {
 
   return (
     <div className="space-y-6">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p style={{ fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 4 }}>Módulo</p>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>Clientes</h2>
+          <h2 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', fontWeight: 800, color: '#fff' }}>Clientes</h2>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm">
+        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm self-start sm:self-auto">
           <Plus size={14} /> Novo Cliente
         </button>
       </div>
@@ -83,49 +84,51 @@ export default function Clients() {
         </div>
       ) : (
         <div className="glass overflow-hidden">
-          <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
-                {['Nome', 'CPF/CNPJ', 'Telefone', 'Venc.', 'Contrato', 'Recorrente', 'Status', ''].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '12px 20px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(c => (
-                <tr key={c.id} className="dark-row">
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: '#fff' }}>{c.nome}</td>
-                  <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.35)', fontSize: '0.72rem' }}>{c.cnpj_cpf ?? '—'}</td>
-                  <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.35)' }}>{c.telefone ?? '—'}</td>
-                  <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.35)' }}>{c.dia_vencimento ? `Dia ${c.dia_vencimento}` : '—'}</td>
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>{c.valor_contrato ? formatBRL(c.valor_contrato) : '—'}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    {c.recorrente
-                      ? badge('rgba(244,196,48,0.08)', '#F4C430', 'rgba(244,196,48,0.2)', 'Sim')
-                      : badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.25)', 'rgba(255,255,255,0.07)', 'Não')
-                    }
-                  </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    {c.ativo
-                      ? badge('rgba(34,197,94,0.08)', '#4ade80', 'rgba(34,197,94,0.2)', 'Ativo')
-                      : badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.25)', 'rgba(255,255,255,0.07)', 'Inativo')
-                    }
-                  </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <button
-                      onClick={() => toggleActive(c)}
-                      style={{ fontSize: '0.72rem', fontWeight: 600, color: c.ativo ? 'rgba(248,113,113,0.7)' : '#F4C430', background: 'none', border: 'none', cursor: 'pointer' }}
-                    >
-                      {c.ativo ? 'Desativar' : 'Ativar'} →
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse', minWidth: 640 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
+                  {['Nome', 'CPF/CNPJ', 'Telefone', 'Venc.', 'Contrato', 'Recorrente', 'Status', ''].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)', whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-              {filtered.length === 0 && (
-                <tr><td colSpan={8} style={{ padding: '32px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map(c => (
+                  <tr key={c.id} className="dark-row">
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>{c.nome}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.35)', fontSize: '0.72rem', whiteSpace: 'nowrap' }}>{c.cnpj_cpf ?? '—'}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{c.telefone ?? '—'}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{c.dia_vencimento ? `Dia ${c.dia_vencimento}` : '—'}</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: 'rgba(255,255,255,0.8)', whiteSpace: 'nowrap' }}>{c.valor_contrato ? formatBRL(c.valor_contrato) : '—'}</td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      {c.recorrente
+                        ? badge('rgba(244,196,48,0.08)', '#F4C430', 'rgba(244,196,48,0.2)', 'Sim')
+                        : badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.25)', 'rgba(255,255,255,0.07)', 'Não')
+                      }
+                    </td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      {c.ativo
+                        ? badge('rgba(34,197,94,0.08)', '#4ade80', 'rgba(34,197,94,0.2)', 'Ativo')
+                        : badge('rgba(255,255,255,0.04)', 'rgba(255,255,255,0.25)', 'rgba(255,255,255,0.07)', 'Inativo')
+                      }
+                    </td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <button
+                        onClick={() => toggleActive(c)}
+                        style={{ fontSize: '0.72rem', fontWeight: 600, color: c.ativo ? 'rgba(248,113,113,0.7)' : '#F4C430', background: 'none', border: 'none', cursor: 'pointer' }}
+                      >
+                        {c.ativo ? 'Desativar' : 'Ativar'} →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filtered.length === 0 && (
+                  <tr><td colSpan={8} style={{ padding: '32px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

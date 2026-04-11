@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { Bell, Search } from 'lucide-react'
+import { Bell, Search, Menu } from 'lucide-react'
 
 const TITLES = {
   '/dashboard':    { title: 'Dashboard',    sub: 'Visão geral do negócio' },
@@ -9,7 +9,7 @@ const TITLES = {
   '/clientes':     { title: 'Clientes',     sub: 'Gestão de clientes' },
 }
 
-export default function Header({ session }) {
+export default function Header({ session, onMenuOpen }) {
   const { pathname } = useLocation()
   const info = TITLES[pathname] ?? { title: 'B&C Sistema', sub: '' }
   const email = session?.user?.email ?? ''
@@ -18,23 +18,35 @@ export default function Header({ session }) {
   return (
     <header style={{
       height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 1.5rem', flexShrink: 0,
+      padding: '0 1rem', flexShrink: 0,
       background: 'rgba(10,10,10,0.9)',
       borderBottom: '1px solid rgba(255,255,255,0.05)',
       backdropFilter: 'blur(12px)',
     }}>
-      <div>
-        <h1 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'rgba(255,255,255,0.88)', letterSpacing: '0.02em' }}>
-          {info.title}
-        </h1>
-        <p style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 1 }}>
-          {info.sub}
-        </p>
+      <div className="flex items-center gap-3">
+        {/* Hamburger — visible only on mobile */}
+        <button
+          onClick={onMenuOpen}
+          className="md:hidden p-2 rounded-lg"
+          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer' }}
+        >
+          <Menu size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
+        </button>
+
+        <div>
+          <h1 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'rgba(255,255,255,0.88)', letterSpacing: '0.02em' }}>
+            {info.title}
+          </h1>
+          <p className="hidden sm:block" style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 1 }}>
+            {info.sub}
+          </p>
+        </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 7, padding: '5px 12px', borderRadius: 8,
+        {/* Search — hidden on very small screens */}
+        <div className="hidden sm:flex" style={{
+          alignItems: 'center', gap: 7, padding: '5px 12px', borderRadius: 8,
           background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)',
         }}>
           <Search size={13} style={{ color: 'rgba(255,255,255,0.22)' }} />

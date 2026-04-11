@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, Wallet, CalendarDays, UserSquare2, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, Wallet, CalendarDays, UserSquare2, LogOut, X } from 'lucide-react'
 import { signOut } from '../../lib/auth'
 
 const NAV = [
@@ -38,50 +38,75 @@ function BCLogo() {
   )
 }
 
-export default function Sidebar({ onLogout }) {
+export default function Sidebar({ isOpen, onClose, onLogout }) {
   async function handleLogout() {
     await signOut()
     onLogout?.()
   }
 
   return (
-    <aside style={{
-      width: 200, flexShrink: 0, display: 'flex', flexDirection: 'column',
-      background: 'rgba(12,12,12,0.97)',
-      borderRight: '1px solid rgba(255,255,255,0.06)',
-    }}>
-      <BCLogo />
-      <div className="gold-line mx-4 mb-3" />
-
-      <nav style={{ flex: 1, padding: '0 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {NAV.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <Icon size={15} />
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      <div style={{ padding: '12px 10px 16px' }}>
-        <div className="gold-line mb-3" />
+    <>
+      {/* Sidebar — mobile: fixed overlay slide-in; desktop: static */}
+      <aside
+        className={[
+          'flex flex-col flex-shrink-0 z-40',
+          'fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out',
+          'md:static md:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full',
+        ].join(' ')}
+        style={{
+          width: 200,
+          background: 'rgba(12,12,12,0.97)',
+          borderRight: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        {/* Mobile close button */}
         <button
-          onClick={handleLogout}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8, width: '100%',
-            padding: '8px 10px', borderRadius: 8, border: 'none', cursor: 'pointer',
-            background: 'none', color: 'rgba(255,255,255,0.25)', fontSize: '0.78rem',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.08)'; e.currentTarget.style.color = '#f87171' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
+          onClick={onClose}
+          className="absolute top-3 right-3 md:hidden p-1.5 rounded-lg"
+          style={{ background: 'rgba(255,255,255,0.06)', border: 'none', cursor: 'pointer' }}
         >
-          <LogOut size={14} />
-          Sair
+          <X size={14} style={{ color: 'rgba(255,255,255,0.4)' }} />
         </button>
-        <p style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.12)', letterSpacing: '0.08em', paddingLeft: 10, marginTop: 4 }}>
-          SISTEMA INTERNO v0.1
-        </p>
-      </div>
-    </aside>
+
+        <BCLogo />
+        <div className="gold-line mx-4 mb-3" />
+
+        <nav style={{ flex: 1, padding: '0 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {NAV.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={onClose}
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              <Icon size={15} />
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div style={{ padding: '12px 10px 16px' }}>
+          <div className="gold-line mb-3" />
+          <button
+            onClick={handleLogout}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+              padding: '8px 10px', borderRadius: 8, border: 'none', cursor: 'pointer',
+              background: 'none', color: 'rgba(255,255,255,0.25)', fontSize: '0.78rem',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.08)'; e.currentTarget.style.color = '#f87171' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
+          >
+            <LogOut size={14} />
+            Sair
+          </button>
+          <p style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.12)', letterSpacing: '0.08em', paddingLeft: 10, marginTop: 4 }}>
+            SISTEMA INTERNO v0.1
+          </p>
+        </div>
+      </aside>
+    </>
   )
 }

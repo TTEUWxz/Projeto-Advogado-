@@ -27,17 +27,18 @@ export default function Login({ onLogin }) {
   return (
     <div style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: '#0a0a0a', padding: 24,
+      background: '#0a0a0a', padding: '16px',
     }}>
       {/* Blobs */}
-      <div style={{ position: 'fixed', top: -100, left: -80, width: 500, height: 500, borderRadius: '50%', background: 'rgba(244,196,48,0.06)', filter: 'blur(140px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'fixed', bottom: -80, right: -60, width: 400, height: 400, borderRadius: '50%', background: 'rgba(200,200,200,0.04)', filter: 'blur(140px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', top: -100, left: -80, width: 'clamp(200px, 40vw, 500px)', height: 'clamp(200px, 40vw, 500px)', borderRadius: '50%', background: 'rgba(244,196,48,0.06)', filter: 'blur(140px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', bottom: -80, right: -60, width: 'clamp(160px, 30vw, 400px)', height: 'clamp(160px, 30vw, 400px)', borderRadius: '50%', background: 'rgba(200,200,200,0.04)', filter: 'blur(140px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 380 }}>
         {/* Single card */}
         <div style={{
           background: 'rgba(16,16,16,0.92)', backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '36px 28px',
+          border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16,
+          padding: 'clamp(24px, 6vw, 36px) clamp(18px, 5vw, 28px)',
         }}>
           {/* Logo inside card */}
           <div style={{ textAlign: 'center', marginBottom: 28 }}>

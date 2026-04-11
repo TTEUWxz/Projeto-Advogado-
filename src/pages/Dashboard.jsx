@@ -72,13 +72,13 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6 sm:space-y-7">
       {/* Greeting */}
       <div>
         <p style={{ fontSize: '0.62rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 6 }}>
           {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </p>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>
+        <h2 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.75rem)', fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>
           Bem-vindo de volta
         </h2>
         <p style={{ fontSize: '0.8rem', color: 'rgba(200,200,200,0.4)', marginTop: 4 }}>
@@ -88,36 +88,37 @@ export default function Dashboard() {
 
       {/* KPIs */}
       {loading ? (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="glass h-36 animate-pulse" />
+            <div key={i} className="glass h-32 sm:h-36 animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {CARDS.map(({ key, label, sub, icon: Icon, arrow: Arrow, accent, dimBg, dimBorder }) => (
             <div
               key={key}
-              className="glass glass-hover p-5 flex flex-col gap-4"
+              className="glass glass-hover p-4 sm:p-5 flex flex-col gap-3 sm:gap-4"
               style={{ background: dimBg, borderColor: dimBorder }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div style={{
-                  width: 34, height: 34, borderRadius: 8,
+                  width: 30, height: 30,
+                  borderRadius: 8,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   background: `${accent}18`,
                   border: `1px solid ${accent}30`,
                 }}>
-                  <Icon size={15} style={{ color: accent }} />
+                  <Icon size={13} style={{ color: accent }} />
                 </div>
-                <Arrow size={14} style={{ color: accent, opacity: 0.6 }} />
+                <Arrow size={13} style={{ color: accent, opacity: 0.6 }} />
               </div>
               <div>
-                <p style={{ fontSize: '1.7rem', fontWeight: 800, color: '#fff', lineHeight: 1 }}>
+                <p style={{ fontSize: 'clamp(1.1rem, 3vw, 1.7rem)', fontWeight: 800, color: '#fff', lineHeight: 1 }}>
                   {key === 'funcionarios' ? kpis[key] : formatBRL(kpis[key])}
                 </p>
-                <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', marginTop: 6, fontWeight: 600, letterSpacing: '0.04em' }}>{label}</p>
-                <p style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', marginTop: 2 }}>{sub}</p>
+                <p style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.4)', marginTop: 5, fontWeight: 600, letterSpacing: '0.04em' }}>{label}</p>
+                <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', marginTop: 2 }}>{sub}</p>
               </div>
             </div>
           ))}
@@ -126,7 +127,7 @@ export default function Dashboard() {
 
       {/* Alert */}
       {kpis.atrasados > 0 && (
-        <div className="glass flex items-center gap-3 px-5 py-4"
+        <div className="glass flex items-center gap-3 px-4 sm:px-5 py-4"
           style={{ borderColor: 'rgba(244,196,48,0.3)', background: 'rgba(244,196,48,0.06)' }}>
           <AlertTriangle size={17} style={{ color: '#F4C430', flexShrink: 0 }} />
           <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)' }}>
@@ -136,7 +137,7 @@ export default function Dashboard() {
       )}
 
       {/* Quick stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {[
           { label: 'Taxa de Saída',          value: kpis.entradas > 0 ? `${Math.round((kpis.saidas / kpis.entradas) * 100)}%` : '—', desc: 'Saídas / Entradas' },
           { label: 'Saldo Líquido',          value: formatBRL(Math.abs(kpis.saldo)), desc: kpis.saldo >= 0 ? 'Positivo este mês' : 'Negativo este mês' },
@@ -144,7 +145,7 @@ export default function Dashboard() {
         ].map(({ label, value, desc }) => (
           <div key={label} className="glass p-4" style={{ borderColor: 'rgba(244,196,48,0.1)' }}>
             <p style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 6 }}>{label}</p>
-            <p className="grad-text" style={{ fontSize: '1.35rem', fontWeight: 800 }}>{value}</p>
+            <p className="grad-text" style={{ fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: 800 }}>{value}</p>
             <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.25)', marginTop: 3 }}>{desc}</p>
           </div>
         ))}

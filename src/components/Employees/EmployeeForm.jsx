@@ -32,7 +32,7 @@ export default function EmployeeForm({ onClose, onSaved }) {
   }
 
   return (
-    <div className="glass p-6" style={{ borderColor: 'rgba(244,196,48,0.15)' }}>
+    <div className="glass p-5 sm:p-6" style={{ borderColor: 'rgba(244,196,48,0.15)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <p style={{ fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 3 }}>Cadastro</p>
@@ -43,7 +43,7 @@ export default function EmployeeForm({ onClose, onSaved }) {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Field label="Nome *"           value={form.nome}           onChange={set('nome')}           required placeholder="Nome completo" />
         <Field label="Cargo"            value={form.cargo}          onChange={set('cargo')}          placeholder="Ex: Assistente" />
         <Field label="CPF"              value={form.cpf}            onChange={set('cpf')}            placeholder="000.000.000-00" />
@@ -66,8 +66,7 @@ export default function EmployeeForm({ onClose, onSaved }) {
           <Field label="Dia de Pagamento" type="number" min="1" max="31" value={form.dia_pagamento} onChange={set('dia_pagamento')} placeholder="Ex: 5" />
         )}
 
-
-        <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', gap: 10, paddingTop: 6 }}>
+        <div className="col-span-1 sm:col-span-2 flex justify-end gap-2.5 pt-2">
           <button type="button" onClick={onClose}
             style={{ padding: '8px 16px', borderRadius: 8, fontSize: '0.8rem', background: 'none', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}>
             Cancelar

@@ -53,26 +53,28 @@ export default function Finance() {
 
   return (
     <div className="space-y-6">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p style={{ fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.5)', marginBottom: 4 }}>Módulo</p>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>Saídas Financeiras</h2>
+          <h2 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', fontWeight: 800, color: '#fff' }}>Saídas Financeiras</h2>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm">
+        <button onClick={() => setShowForm(true)} className="btn-grad flex items-center gap-2 px-4 py-2.5 text-sm self-start sm:self-auto">
           <Plus size={14} /> Novo Gasto
         </button>
       </div>
 
+      {/* Summary bar */}
       {!loading && gastos.length > 0 && (
-        <div className="glass p-4 flex items-center gap-6" style={{ borderColor: 'rgba(244,196,48,0.12)' }}>
+        <div className="glass p-4 flex flex-row flex-wrap items-center gap-4 sm:gap-6" style={{ borderColor: 'rgba(244,196,48,0.12)' }}>
           <div>
             <p style={{ fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)', marginBottom: 4 }}>Total pendente</p>
-            <p style={{ fontSize: '1.35rem', fontWeight: 800, color: '#F4C430' }}>{formatBRL(totalPendente)}</p>
+            <p style={{ fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: 800, color: '#F4C430' }}>{formatBRL(totalPendente)}</p>
           </div>
-          <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.07)' }} />
+          <div className="hidden sm:block" style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.07)' }} />
           <div>
             <p style={{ fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 4 }}>Registros</p>
-            <p style={{ fontSize: '1.35rem', fontWeight: 800, color: 'rgba(255,255,255,0.7)' }}>{gastos.length}</p>
+            <p style={{ fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: 800, color: 'rgba(255,255,255,0.7)' }}>{gastos.length}</p>
           </div>
         </div>
       )}
@@ -96,48 +98,50 @@ export default function Finance() {
         </div>
       ) : (
         <div className="glass overflow-hidden">
-          <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
-                {['Descrição', 'Categoria', 'Tipo', 'Vencimento', 'Valor', 'Status', ''].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '12px 20px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(g => (
-                <tr key={g.id} className="dark-row">
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: '#fff' }}>{g.descricao}</td>
-                  <td style={{ padding: '14px 20px', color: 'rgba(255,255,255,0.35)' }}>{g.categorias_gasto?.nome ?? '—'}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <span style={{
-                      fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: 6, display: 'inline-block',
-                      ...(g.categorias_gasto?.tipo === 'fixo'
-                        ? { background: 'rgba(200,200,200,0.07)', color: '#C8C8C8', border: '1px solid rgba(200,200,200,0.15)' }
-                        : { background: 'rgba(244,196,48,0.07)', color: '#F4C430', border: '1px solid rgba(244,196,48,0.18)' })
-                    }}>
-                      {g.categorias_gasto?.tipo === 'fixo' ? 'Fixo' : 'Variável'}
-                    </span>
-                  </td>
-                  <td style={{ padding: '14px 20px', fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)' }}>
-                    {new Date(g.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR')}
-                  </td>
-                  <td style={{ padding: '14px 20px', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>{formatBRL(g.valor)}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <span style={badge(g.status)}>{g.status}</span>
-                  </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    {g.status === 'pendente' && (
-                      <button onClick={() => markPaid(g.id)}
-                        style={{ fontSize: '0.72rem', fontWeight: 600, color: '#F4C430', background: 'none', border: 'none', cursor: 'pointer' }}>
-                        Marcar pago →
-                      </button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
+                  {['Descrição', 'Categoria', 'Tipo', 'Vencimento', 'Valor', 'Status', ''].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)', whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map(g => (
+                  <tr key={g.id} className="dark-row">
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis' }}>{g.descricao}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{g.categorias_gasto?.nome ?? '—'}</td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <span style={{
+                        fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: 6, display: 'inline-block',
+                        ...(g.categorias_gasto?.tipo === 'fixo'
+                          ? { background: 'rgba(200,200,200,0.07)', color: '#C8C8C8', border: '1px solid rgba(200,200,200,0.15)' }
+                          : { background: 'rgba(244,196,48,0.07)', color: '#F4C430', border: '1px solid rgba(244,196,48,0.18)' })
+                      }}>
+                        {g.categorias_gasto?.tipo === 'fixo' ? 'Fixo' : 'Variável'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+                      {new Date(g.data_vencimento + 'T00:00:00').toLocaleDateString('pt-BR')}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: 'rgba(255,255,255,0.8)', whiteSpace: 'nowrap' }}>{formatBRL(g.valor)}</td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <span style={badge(g.status)}>{g.status}</span>
+                    </td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      {g.status === 'pendente' && (
+                        <button onClick={() => markPaid(g.id)}
+                          style={{ fontSize: '0.72rem', fontWeight: 600, color: '#F4C430', background: 'none', border: 'none', cursor: 'pointer' }}>
+                          Marcar pago →
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
