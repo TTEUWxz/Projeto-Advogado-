@@ -30,8 +30,8 @@ export default function Login({ onLogin }) {
       background: '#0a0a0a', padding: '16px',
     }}>
       {/* Blobs */}
-      <div style={{ position: 'fixed', top: -100, left: -80, width: 'clamp(200px, 40vw, 500px)', height: 'clamp(200px, 40vw, 500px)', borderRadius: '50%', background: 'rgba(244,196,48,0.06)', filter: 'blur(140px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'fixed', bottom: -80, right: -60, width: 'clamp(160px, 30vw, 400px)', height: 'clamp(160px, 30vw, 400px)', borderRadius: '50%', background: 'rgba(200,200,200,0.04)', filter: 'blur(140px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', top: -100, left: -60, width: 'clamp(160px, 35vw, 400px)', height: 'clamp(160px, 35vw, 400px)', borderRadius: '50%', background: 'rgba(244,196,48,0.06)', filter: 'blur(120px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', bottom: -60, right: 0, width: 'clamp(120px, 25vw, 300px)', height: 'clamp(120px, 25vw, 300px)', borderRadius: '50%', background: 'rgba(200,200,200,0.04)', filter: 'blur(120px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 380 }}>
         {/* Single card */}

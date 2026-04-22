@@ -17,6 +17,10 @@
 
   html, body, #root { height: 100%; margin: 0; }
 
+  /* Prevent blobs / fixed elements from creating horizontal scroll on mobile */
+  html { overflow-x: hidden; }
+  body { overflow-x: hidden; }
+
   body {
     background-color: var(--bg);
     color: rgba(255,255,255,0.88);

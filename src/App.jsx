@@ -42,9 +42,9 @@ function AppShell() {
 
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="blob w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] top-[-120px] left-[-80px]"
+      <div className="blob w-[240px] h-[240px] sm:w-[420px] sm:h-[420px] top-[-100px] left-[-50px]"
            style={{ background: 'rgba(244,196,48,0.05)' }} />
-      <div className="blob w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bottom-[-80px] right-[-60px]"
+      <div className="blob w-[160px] h-[160px] sm:w-[320px] sm:h-[320px] bottom-[-60px] right-0"
            style={{ background: 'rgba(200,200,200,0.03)' }} />
 
       {/* SEV7N logo — marca d'água centralizada no fundo */}
