@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, Wallet, CalendarDays, UserSquare2, LogOut, X } from 'lucide-react'
+import { LayoutDashboard, Users, Wallet, CalendarDays, UserSquare2, LogOut, X, MessageCircle } from 'lucide-react'
 import { signOut } from '../../lib/auth'
 
 const NAV = [
@@ -8,6 +8,7 @@ const NAV = [
   { to: '/funcionarios', label: 'Funcionários',  icon: Users },
   { to: '/financeiro',   label: 'Financeiro',    icon: Wallet },
   { to: '/calendario',   label: 'Calendário',    icon: CalendarDays },
+  { to: '/cobrancas',    label: 'Cobranças',     icon: MessageCircle },
 ]
 
 function SiteLogoSection() {

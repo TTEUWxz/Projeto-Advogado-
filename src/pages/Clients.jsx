@@ -1,21 +1,23 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { Plus, Users } from 'lucide-react'
+import { Plus, Users, MessageCircle } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { formatBRL } from '../lib/calendarEvents'
 import { useToast } from '../context/ToastContext'
 import { useDebounce } from '../lib/hooks'
 import ClientForm from '../components/Clients/ClientForm'
+import CobrancaModal from '../components/Cobrancas/CobrancaModal'
 
 const badge = (bg, color, border, text) => (
   <span style={{ fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: 6, background: bg, color, border: `1px solid ${border}`, whiteSpace: 'nowrap' }}>{text}</span>
 )
 
 export default function Clients() {
-  const [clients, setClients]   = useState([])
-  const [search, setSearch]     = useState('')
-  const [loading, setLoading]   = useState(true)
-  const [showForm, setShowForm] = useState(false)
-  const { toast }               = useToast()
+  const [clients,    setClients]    = useState([])
+  const [search,     setSearch]     = useState('')
+  const [loading,    setLoading]    = useState(true)
+  const [showForm,   setShowForm]   = useState(false)
+  const [cobranca,   setCobranca]   = useState(null) // client to charge
+  const { toast }                   = useToast()
 
   const debouncedSearch = useDebounce(search, 250)
 
@@ -61,7 +63,8 @@ export default function Clients() {
         </button>
       </div>
 
-      {showForm && <ClientForm onClose={() => setShowForm(false)} onSaved={() => { setShowForm(false); load() }} />}
+      {showForm  && <ClientForm onClose={() => setShowForm(false)} onSaved={() => { setShowForm(false); load() }} />}
+      {cobranca  && <CobrancaModal client={cobranca} onClose={() => setCobranca(null)} />}
 
       {/* Search */}
       {clients.length > 0 && (
@@ -94,7 +97,7 @@ export default function Clients() {
             <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse', minWidth: 640 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(244,196,48,0.1)' }}>
-                  {['Nome', 'CPF/CNPJ', 'Telefone', 'Venc.', 'Contrato', 'Recorrente', 'Status', ''].map(h => (
+                  {['Nome', 'CPF/CNPJ', 'Telefone', 'Venc.', 'Contrato', 'Recorrente', 'Status', '', ''].map(h => (
                     <th key={h} style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(244,196,48,0.45)', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
@@ -125,6 +128,20 @@ export default function Clients() {
                         style={{ fontSize: '0.72rem', fontWeight: 600, color: c.ativo ? 'rgba(248,113,113,0.7)' : '#F4C430', background: 'none', border: 'none', cursor: 'pointer' }}
                       >
                         {c.ativo ? 'Desativar' : 'Ativar'} →
+                      </button>
+                    </td>
+                    <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
+                      <button
+                        onClick={() => setCobranca(c)}
+                        title="Gerar mensagem de cobrança"
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 5,
+                          fontSize: '0.72rem', fontWeight: 700, padding: '5px 10px', borderRadius: 7,
+                          background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                          border: 'none', color: '#fff', cursor: 'pointer',
+                        }}
+                      >
+                        <MessageCircle size={11} /> Cobrar
                       </button>
                     </td>
                   </tr>

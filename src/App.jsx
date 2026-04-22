@@ -10,6 +10,7 @@ import Employees from './pages/Employees'
 import Finance from './pages/Finance'
 import Calendar from './pages/Calendar'
 import Clients from './pages/Clients'
+import Cobrancas from './pages/Cobrancas'
 import Login from './pages/Login'
 
 function AppShell() {
@@ -94,6 +95,7 @@ function AppShell() {
               <Route path="/financeiro"   element={<Finance />} />
               <Route path="/calendario"   element={<Calendar />} />
               <Route path="/clientes"     element={<Clients />} />
+              <Route path="/cobrancas"    element={<Cobrancas />} />
             </Routes>
           </main>
         </div>
