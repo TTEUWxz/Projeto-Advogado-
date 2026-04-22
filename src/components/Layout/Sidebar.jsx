@@ -18,10 +18,9 @@ function SiteLogoSection() {
         src="/logo-sev7n.svg"
         alt="SEV7N Team"
         style={{
-          width: 72, height: 72,
-          borderRadius: 14,
-          marginBottom: 10,
-          filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.08))',
+          width: 76, height: 76,
+          marginBottom: 8,
+          filter: 'drop-shadow(0 0 10px rgba(244,196,48,0.15))',
         }}
       />
       <p style={{ fontWeight: 800, fontSize: '0.76rem', color: '#F4C430', textAlign: 'center', lineHeight: 1.2 }}>

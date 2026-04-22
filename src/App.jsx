@@ -53,13 +53,13 @@ function AppShell() {
         aria-hidden="true"
         style={{
           position: 'fixed',
-          bottom: '6%',
-          right: '4%',
-          width: 'clamp(120px, 18vw, 280px)',
-          opacity: 0.035,
+          bottom: '5%',
+          right: '3%',
+          width: 'clamp(140px, 20vw, 300px)',
+          opacity: 0.055,
           pointerEvents: 'none',
           zIndex: 0,
-          filter: 'grayscale(1) brightness(3)',
+          filter: 'brightness(4)',
           userSelect: 'none',
         }}
       />

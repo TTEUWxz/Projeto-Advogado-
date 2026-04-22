@@ -46,10 +46,10 @@ export default function Login({ onLogin }) {
               src="/logo-sev7n.svg"
               alt="SEV7N Team"
               style={{
-                width: 80, height: 80, borderRadius: 16,
+                width: 88, height: 88,
                 margin: '0 auto 12px',
                 display: 'block',
-                filter: 'drop-shadow(0 0 16px rgba(255,255,255,0.1))',
+                filter: 'drop-shadow(0 0 18px rgba(244,196,48,0.2))',
               }}
             />
             <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#F4C430', letterSpacing: '0.01em' }}>Batista &amp; Calzolari</p>
