@@ -10,24 +10,20 @@ const NAV = [
   { to: '/calendario',   label: 'Calendário',    icon: CalendarDays },
 ]
 
-function BCLogo() {
+function SiteLogoSection() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '22px 16px 18px' }}>
-      <div style={{
-        position: 'relative', width: 56, height: 56,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        border: '2px solid rgba(200,200,200,0.45)',
-        background: '#0a0a0a',
-        boxShadow: '0 0 0 1px rgba(255,255,255,0.05)',
-        marginBottom: 10,
-      }}>
-        <span style={{ position: 'absolute', inset: 4, border: '1px solid rgba(200,200,200,0.15)', pointerEvents: 'none' }} />
-        <span style={{
-          fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: '1.35rem', letterSpacing: '-0.03em',
-          background: 'linear-gradient(135deg,#e8e8e8,#ffffff)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-        }}>BC</span>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 12px 16px' }}>
+      {/* SEV7N logo */}
+      <img
+        src="/logo-sev7n.svg"
+        alt="SEV7N Team"
+        style={{
+          width: 72, height: 72,
+          borderRadius: 14,
+          marginBottom: 10,
+          filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.08))',
+        }}
+      />
       <p style={{ fontWeight: 800, fontSize: '0.76rem', color: '#F4C430', textAlign: 'center', lineHeight: 1.2 }}>
         Batista &amp; Calzolari
       </p>
@@ -46,7 +42,6 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
 
   return (
     <>
-      {/* Sidebar — mobile: fixed overlay slide-in; desktop: static */}
       <aside
         className={[
           'flex flex-col flex-shrink-0 z-40',
@@ -69,7 +64,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
           <X size={14} style={{ color: 'rgba(255,255,255,0.4)' }} />
         </button>
 
-        <BCLogo />
+        <SiteLogoSection />
         <div className="gold-line mx-4 mb-3" />
 
         <nav style={{ flex: 1, padding: '0 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>

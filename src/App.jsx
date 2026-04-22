@@ -46,6 +46,24 @@ function AppShell() {
       <div className="blob w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bottom-[-80px] right-[-60px]"
            style={{ background: 'rgba(200,200,200,0.03)' }} />
 
+      {/* SEV7N logo — marca d'água centralizada no fundo */}
+      <img
+        src="/logo-sev7n.svg"
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          bottom: '6%',
+          right: '4%',
+          width: 'clamp(120px, 18vw, 280px)',
+          opacity: 0.035,
+          pointerEvents: 'none',
+          zIndex: 0,
+          filter: 'grayscale(1) brightness(3)',
+          userSelect: 'none',
+        }}
+      />
+
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Mobile overlay backdrop */}
         {menuOpen && (

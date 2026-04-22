@@ -5,7 +5,16 @@
       "Bash(npm install:*)",
       "mcp__Claude_Preview__preview_start",
       "Bash(gh auth:*)",
-      "Bash(git --version)"
+      "Bash(git --version)",
+      "Bash(dir \"%TEMP%\\\\*.png\" \"%TEMP%\\\\*.jpg\" \"%TEMP%\\\\*.jpeg\" \"%TEMP%\\\\*.webp\" /b /o-d)",
+      "Bash(dir \"%USERPROFILE%\\\\Downloads\\\\*.png\" \"%USERPROFILE%\\\\Downloads\\\\*.jpg\" \"%USERPROFILE%\\\\Downloads\\\\*.jpeg\" /b /o-d)",
+      "Bash(dir \"C:\\\\Users\\\\TTEUWxz\\\\AppData\\\\Local\\\\Temp\\\\claude\" /b /s /o-d)",
+      "Bash(findstr /i \".png .jpg .jpeg .webp\")",
+      "Bash(dir \"C:\\\\Users\\\\TTEUWxz\\\\Pictures\" /b /o-d)",
+      "Bash(dir \"C:\\\\Users\\\\TTEUWxz\\\\AppData\\\\Local\\\\Temp\\\\claude\" /b /s)",
+      "Bash(dir \"C:\\\\Users\\\\TTEUWxz\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-TTEUWxz-Downloads-Nova-pasta\" /b /s)",
+      "Bash(dir \"C:\\\\Users\\\\TTEUWxz\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-TTEUWxz-Downloads-Nova-pasta\\\\5cafbf5a-1fda-47ac-bc87-532135dd1323\" /b /s)",
+      "Bash(not exist *)"
     ]
   }
 }

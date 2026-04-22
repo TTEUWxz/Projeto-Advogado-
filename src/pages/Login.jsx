@@ -42,19 +42,16 @@ export default function Login({ onLogin }) {
         }}>
           {/* Logo inside card */}
           <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div style={{
-              position: 'relative', width: 58, height: 58, margin: '0 auto 12px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '2px solid rgba(200,200,200,0.45)',
-              background: '#0a0a0a',
-            }}>
-              <span style={{ position: 'absolute', inset: 4, border: '1px solid rgba(200,200,200,0.14)', pointerEvents: 'none' }} />
-              <span style={{
-                fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: '1.45rem', letterSpacing: '-0.03em',
-                background: 'linear-gradient(135deg,#e8e8e8,#ffffff)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>BC</span>
-            </div>
+            <img
+              src="/logo-sev7n.svg"
+              alt="SEV7N Team"
+              style={{
+                width: 80, height: 80, borderRadius: 16,
+                margin: '0 auto 12px',
+                display: 'block',
+                filter: 'drop-shadow(0 0 16px rgba(255,255,255,0.1))',
+              }}
+            />
             <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#F4C430', letterSpacing: '0.01em' }}>Batista &amp; Calzolari</p>
             <p style={{ fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(200,200,200,0.38)', marginTop: 3 }}>Advogados Associados</p>
           </div>
