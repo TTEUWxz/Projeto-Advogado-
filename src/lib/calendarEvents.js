@@ -47,6 +47,11 @@ export async function buildCalendarEvents(startDate, endDate) {
     return []
   }
 
+  if (escalas.error)     console.error('[calendarEvents] escalas:',     escalas.error.message)
+  if (pagamentos.error)  console.error('[calendarEvents] pagamentos:',  pagamentos.error.message)
+  if (recebimentos.error) console.error('[calendarEvents] recebimentos:', recebimentos.error.message)
+  if (gastos.error)      console.error('[calendarEvents] gastos:',      gastos.error.message)
+
   escalas.data?.forEach(e => {
     events.push({
       id: `escala-${e.id}`,

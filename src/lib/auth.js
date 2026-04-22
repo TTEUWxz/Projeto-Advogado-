@@ -40,6 +40,12 @@ export async function getSession() {
     const raw = sessionStorage.getItem('dev_session')
     return raw ? JSON.parse(raw) : null
   }
-  const { data: { session } } = await supabase.auth.getSession()
-  return session
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    if (error) { console.error('[auth] getSession:', error.message); return null }
+    return session
+  } catch (err) {
+    console.error('[auth] getSession exception:', err)
+    return null
+  }
 }

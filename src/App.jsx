@@ -21,7 +21,7 @@ function AppShell() {
     getSession().then(s => setSession(s ?? null))
     try {
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s ?? null))
-      return () => subscription.unsubscribe()
+      return () => subscription?.unsubscribe?.()
     } catch {
       // Supabase not configured — dev mode handles auth via sessionStorage
     }

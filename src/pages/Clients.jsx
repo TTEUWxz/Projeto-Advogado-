@@ -147,7 +147,7 @@ export default function Clients() {
                   </tr>
                 ))}
                 {filtered.length === 0 && search && (
-                  <tr><td colSpan={8} style={{ padding: '32px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
+                  <tr><td colSpan={9} style={{ padding: '32px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.82rem' }}>Nenhum resultado para "{search}"</td></tr>
                 )}
               </tbody>
             </table>

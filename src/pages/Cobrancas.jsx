@@ -15,24 +15,18 @@ export default function Cobrancas() {
 
   const debouncedSearch = useDebounce(search, 250)
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (signal) => {
     setLoading(true)
 
-    // Fetch all active clients
-    const { data: allClients, error: cErr } = await supabase
-      .from('clientes')
-      .select('*')
-      .eq('ativo', true)
-      .order('nome')
+    // Fetch clients and recebimentos in parallel
+    const [{ data: allClients, error: cErr }, { data: recebimentos, error: rErr }] = await Promise.all([
+      supabase.from('clientes').select('*').eq('ativo', true).order('nome'),
+      supabase.from('recebimentos').select('cliente_id, valor, data_vencimento, status').in('status', ['pendente', 'atrasado']),
+    ])
+
+    if (signal?.aborted) return  // component unmounted — discard result
 
     if (cErr) { toast(cErr.message, 'error'); setLoading(false); return }
-
-    // Fetch all pending/overdue recebimentos
-    const { data: recebimentos, error: rErr } = await supabase
-      .from('recebimentos')
-      .select('cliente_id, valor, data_vencimento, status')
-      .in('status', ['pendente', 'atrasado'])
-
     if (rErr) { toast(rErr.message, 'error'); setLoading(false); return }
 
     // Group recebimentos by client
@@ -42,25 +36,29 @@ export default function Cobrancas() {
       map[r.cliente_id].push(r)
     }
 
-    // Merge — include only clients with pending items OR past due day
+    // Enrich clients — include only those with actual pending records
     const today = new Date()
     const enriched = (allClients ?? [])
       .map(c => {
         const recs = map[c.id] ?? []
         const totalPendente = recs.reduce((s, r) => s + (r.valor ?? 0), 0)
-        const maisAntigo = recs.sort((a, b) => a.data_vencimento.localeCompare(b.data_vencimento))[0]
+        const maisAntigo = [...recs].sort((a, b) => a.data_vencimento.localeCompare(b.data_vencimento))[0]
         const diasAtraso = maisAntigo
           ? Math.max(0, Math.floor((today - new Date(maisAntigo.data_vencimento + 'T00:00:00')) / 86400000))
           : 0
         return { ...c, _recs: recs, _total: totalPendente, _diasAtraso: diasAtraso }
       })
-      .filter(c => c._recs.length > 0)  // only clients with actual pending records
+      .filter(c => c._recs.length > 0)
 
     setClientes(enriched)
     setLoading(false)
   }, [toast])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    const controller = new AbortController()
+    load(controller.signal)
+    return () => controller.abort()
+  }, [load])
 
   const filtered = useMemo(() => {
     const q = debouncedSearch.toLowerCase()

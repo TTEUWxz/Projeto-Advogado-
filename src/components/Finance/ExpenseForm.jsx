@@ -29,7 +29,8 @@ export default function ExpenseForm({ onClose, onSaved }) {
         if (error) { toast(error.message, 'error'); return }
         setCats(data ?? [])
       })
-  }, [toast])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const set = f => e => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value

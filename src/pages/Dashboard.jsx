@@ -52,6 +52,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function load() {
+      try {
       const now   = new Date()
       const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)
       const end   = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().slice(0, 10)
@@ -63,10 +64,19 @@ export default function Dashboard() {
         supabase.from('recebimentos').select('id', { count: 'exact' }).eq('status', 'atrasado'),
       ])
 
+      if (rec.error)  console.error('[Dashboard] recebimentos:', rec.error.message)
+      if (gas.error)  console.error('[Dashboard] gastos:',       gas.error.message)
+      if (func.error) console.error('[Dashboard] funcionarios:', func.error.message)
+      if (atras.error) console.error('[Dashboard] atrasados:',   atras.error.message)
+
       const entradas = rec.data?.reduce((s, r) => s + (r.valor ?? 0), 0) ?? 0
       const saidas   = gas.data?.reduce((s, r) => s + (r.valor ?? 0), 0) ?? 0
       setKpis({ entradas, saidas, saldo: entradas - saidas, funcionarios: func.count ?? 0, atrasados: atras.count ?? 0 })
-      setLoading(false)
+      } catch (err) {
+        console.error('[Dashboard] load error:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     load()
   }, [])

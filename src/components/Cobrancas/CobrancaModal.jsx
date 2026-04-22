@@ -113,11 +113,15 @@ export default function CobrancaModal({ client, onClose }) {
   // Reset editable when template or client changes
   useEffect(() => { setEditavel(msgGerada) }, [tipo, client.id, pendentes.length])
 
-  function copiar() {
-    navigator.clipboard.writeText(editavel)
-    setCopied(true)
-    toast('Mensagem copiada!', 'success')
-    setTimeout(() => setCopied(false), 2000)
+  async function copiar() {
+    try {
+      await navigator.clipboard.writeText(editavel)
+      setCopied(true)
+      toast('Mensagem copiada!', 'success')
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast('Não foi possível copiar. Selecione o texto manualmente.', 'error')
+    }
   }
 
   function abrirWhatsApp() {
