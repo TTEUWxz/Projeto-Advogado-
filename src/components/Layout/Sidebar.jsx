@@ -25,10 +25,7 @@ function SiteLogoSection() {
         }}
       />
       <p style={{ fontWeight: 800, fontSize: '0.76rem', color: '#F4C430', textAlign: 'center', lineHeight: 1.2 }}>
-        Batista &amp; Calzolari
-      </p>
-      <p style={{ fontSize: '0.56rem', letterSpacing: '0.16em', color: 'rgba(200,200,200,0.38)', textTransform: 'uppercase', marginTop: 3 }}>
-        Advogados Associados
+        SEV7N Company
       </p>
     </div>
   )

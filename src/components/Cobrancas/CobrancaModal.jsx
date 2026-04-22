@@ -10,7 +10,7 @@ const buildMessage = (tipo, client, valor, vencimento, diasAtraso) => {
 
   if (tipo === 'amigavel') return `Olá, *${nome}*! 👋
 
-Tudo bem? Aqui é da equipe *Batista & Calzolari Advogados Associados*.
+Tudo bem? Aqui é da equipe *SEV7N Company*.
 
 Passamos para lembrar sobre um pagamento em aberto referente aos nossos serviços:
 
@@ -20,7 +20,7 @@ Passamos para lembrar sobre um pagamento em aberto referente aos nossos serviço
 
 Para regularizar ou tirar dúvidas, é só responder aqui! Estamos à disposição 😊
 
-_Batista & Calzolari Advogados Associados_`
+_SEV7N Company_`
 
   if (tipo === 'formal') return `Prezado(a) *${client.nome}*,
 
@@ -35,7 +35,7 @@ Solicitamos a regularização no prazo de *5 (cinco) dias úteis*, a fim de evit
 Para negociação ou dúvidas, entre em contato conosco.
 
 Atenciosamente,
-*Batista & Calzolari Advogados Associados*`
+*SEV7N Company*`
 
   // urgente
   return `⚠️ *AVISO DE COBRANÇA* ⚠️
@@ -55,7 +55,7 @@ Atenciosamente,
 
 Entre em contato *imediatamente* para resolver essa situação.
 
-*Batista & Calzolari Advogados Associados*`
+*SEV7N Company*`
 }
 
 const TIPOS = [

@@ -82,7 +82,7 @@ export default function Dashboard() {
           Bem-vindo de volta
         </h2>
         <p style={{ fontSize: '0.8rem', color: 'rgba(200,200,200,0.4)', marginTop: 4 }}>
-          Batista &amp; Calzolari — resumo financeiro do período.
+          SEV7N Company — resumo financeiro do período.
         </p>
       </div>
 

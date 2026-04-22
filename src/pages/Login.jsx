@@ -52,8 +52,7 @@ export default function Login({ onLogin }) {
                 filter: 'drop-shadow(0 0 18px rgba(244,196,48,0.2))',
               }}
             />
-            <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#F4C430', letterSpacing: '0.01em' }}>Batista &amp; Calzolari</p>
-            <p style={{ fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(200,200,200,0.38)', marginTop: 3 }}>Advogados Associados</p>
+            <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#F4C430', letterSpacing: '0.01em' }}>SEV7N Company</p>
           </div>
 
           {/* Divider */}
