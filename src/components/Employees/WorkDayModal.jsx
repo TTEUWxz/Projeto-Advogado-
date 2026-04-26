@@ -83,7 +83,7 @@ export default function WorkDayModal({ employee, onClose }) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }} // click outside to close
     >
       <div
-        className="glass"
+        className="glass modal-scroll"
         style={{
           width: '100%', maxWidth: 520, maxHeight: '92vh', overflowY: 'auto',
           borderColor: 'rgba(244,196,48,0.2)',

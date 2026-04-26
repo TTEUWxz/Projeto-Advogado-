@@ -7,6 +7,7 @@ const TITLES = {
   '/financeiro':   { title: 'Financeiro',   sub: 'Controle de saídas' },
   '/calendario':   { title: 'Calendário',   sub: 'Pagamentos e escalas' },
   '/clientes':     { title: 'Clientes',     sub: 'Gestão de clientes' },
+  '/cobrancas':    { title: 'Cobranças',    sub: 'Mensagens de cobrança' },
 }
 
 export default function Header({ session, onMenuOpen }) {

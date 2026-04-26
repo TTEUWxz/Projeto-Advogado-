@@ -21,6 +21,17 @@
   html { overflow-x: hidden; }
   body { overflow-x: hidden; }
 
+  /* Remove 300ms tap delay on all interactive elements */
+  button, a, [role="button"] { touch-action: manipulation; }
+
+  /* Prevent iOS Safari from auto-zooming when inputs are focused.
+     Any input with font-size < 16px triggers zoom — this overrides globally on mobile. */
+  @media (max-width: 768px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+  }
+
   body {
     background-color: var(--bg);
     color: rgba(255,255,255,0.88);
@@ -108,11 +119,40 @@
   }
   .nav-item.active svg { color: var(--yellow); }
 
+  /* Logout button — works on both hover (desktop) and tap (mobile) */
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: none;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.78rem;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+    touch-action: manipulation;
+  }
+  .logout-btn:hover,
+  .logout-btn:active {
+    background: rgba(248,113,113,0.08);
+    color: #f87171;
+  }
+
   /* Gold divider */
   .gold-line {
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(244,196,48,0.4), transparent);
   }
+}
+
+/* Modal scroll — smooth on iOS */
+.modal-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
 }
 
 /* FullCalendar dark + gold overrides */

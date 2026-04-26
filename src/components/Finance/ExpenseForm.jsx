@@ -75,22 +75,25 @@ export default function ExpenseForm({ onClose, onSaved }) {
         <Field label="Vencimento *" type="date"   value={form.data_vencimento} onChange={set('data_vencimento')} required />
 
         <div className="col-span-1 sm:col-span-2 flex flex-wrap items-center gap-3 sm:gap-4">
-          <label style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-            <button
-              type="button"
-              onClick={() => setForm(p => ({ ...p, recorrente: !p.recorrente }))}
-              style={{
-                width: 18, height: 18, borderRadius: 5, flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.06)',
-                border: `1.5px solid ${form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.12)'}`,
-                cursor: 'pointer',
-              }}
-            >
-              {form.recorrente && <span style={{ fontSize: 9, fontWeight: 900, color: '#0a0a0a' }}>✓</span>}
-            </button>
-            <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)' }}>Gasto recorrente</span>
-          </label>
+          <button
+            type="button"
+            onClick={() => setForm(p => ({ ...p, recorrente: !p.recorrente }))}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '8px 0', touchAction: 'manipulation', textAlign: 'left',
+            }}
+          >
+            <span style={{
+              width: 22, height: 22, borderRadius: 6, flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.06)',
+              border: `1.5px solid ${form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.12)'}`,
+            }}>
+              {form.recorrente && <span style={{ fontSize: 11, fontWeight: 900, color: '#0a0a0a' }}>✓</span>}
+            </span>
+            <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)' }}>Gasto recorrente</span>
+          </button>
           {form.recorrente && (
             <select value={form.recorrencia} onChange={set('recorrencia')} style={{ ...inputStyle, width: 'auto', minWidth: 120, colorScheme: 'dark' }}>
               <option value="mensal">Mensal</option>

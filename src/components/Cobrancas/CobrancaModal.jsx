@@ -137,7 +137,7 @@ export default function CobrancaModal({ client, onClose }) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="glass"
+        className="glass modal-scroll"
         style={{ width: '100%', maxWidth: 560, maxHeight: '92vh', overflowY: 'auto', borderColor: 'rgba(244,196,48,0.2)', padding: 'clamp(16px,4vw,28px)' }}
       >
         {/* Header */}

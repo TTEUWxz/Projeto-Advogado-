@@ -60,21 +60,26 @@ export default function ClientForm({ onClose, onSaved }) {
         <Field label="Dia de Venc."   value={form.dia_vencimento} onChange={set('dia_vencimento')} type="number" min="1" max="31" placeholder="Ex: 10" />
         <Field label="Valor do Contrato (R$)" value={form.valor_contrato} onChange={set('valor_contrato')} type="number" step="0.01" placeholder="0,00" />
 
-        <div className="col-span-1 sm:col-span-2 flex items-center gap-3">
+        <div className="col-span-1 sm:col-span-2">
           <button
             type="button"
             onClick={() => setForm(p => ({ ...p, recorrente: !p.recorrente }))}
             style={{
-              width: 18, height: 18, borderRadius: 5, flexShrink: 0,
+              display: 'flex', alignItems: 'center', gap: 10,
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '8px 0', touchAction: 'manipulation', width: '100%', textAlign: 'left',
+            }}
+          >
+            <span style={{
+              width: 22, height: 22, borderRadius: 6, flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.06)',
               border: `1.5px solid ${form.recorrente ? '#F4C430' : 'rgba(255,255,255,0.12)'}`,
-              cursor: 'pointer',
-            }}
-          >
-            {form.recorrente && <span style={{ fontSize: 9, fontWeight: 900, color: '#0a0a0a' }}>✓</span>}
+            }}>
+              {form.recorrente && <span style={{ fontSize: 11, fontWeight: 900, color: '#0a0a0a' }}>✓</span>}
+            </span>
+            <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)' }}>Pagamento recorrente mensal</span>
           </button>
-          <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)' }}>Pagamento recorrente mensal</span>
         </div>
 
         <div className="col-span-1 sm:col-span-2 flex justify-end gap-2.5 pt-2">
