@@ -88,10 +88,10 @@ export default function Login({ onLogin }) {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'monospace' }}>
-                <span style={{ color: 'rgba(255,255,255,0.25)' }}>email</span>{'  '}teste@bc.com.br
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>email</span>{'  '}bcaiolrmos571@gmail.com
               </p>
               <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'monospace' }}>
-                <span style={{ color: 'rgba(255,255,255,0.25)' }}>senha</span>{'  '}teste123
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>senha</span>{'  '}B2006XXX
               </p>
             </div>
           </div>

@@ -1,7 +1,12 @@
 import { supabase } from './supabase'
 
-const DEV_EMAIL    = 'teste@bc.com.br'
-const DEV_PASSWORD = 'teste123'
+const DEV_EMAIL    = 'bcaiolrmos571@gmail.com'
+const DEV_PASSWORD = 'B2006XXX'
+
+function isDevMode() {
+  const url = import.meta.env.VITE_SUPABASE_URL ?? ''
+  return url.includes('placeholder') || url === '' || url === undefined
+}
 
 // Mock session used when Supabase is not yet configured
 const DEV_SESSION = {
@@ -9,12 +14,8 @@ const DEV_SESSION = {
   access_token: 'dev-token',
 }
 
-function isDevMode() {
-  const url = import.meta.env.VITE_SUPABASE_URL ?? ''
-  return url.includes('placeholder') || url === '' || url === undefined
-}
-
 export async function signIn(email, password) {
+  // ── Pure offline/dev mode (no Supabase URL configured) ──────────────
   if (isDevMode()) {
     if (email === DEV_EMAIL && password === DEV_PASSWORD) {
       sessionStorage.setItem('dev_session', JSON.stringify(DEV_SESSION))
@@ -22,8 +23,47 @@ export async function signIn(email, password) {
     }
     return { data: null, error: { message: 'E-mail ou senha incorretos.' } }
   }
+
+  // ── Real Supabase mode ───────────────────────────────────────────────
+  // 1. Try to sign in normally
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-  return { data, error }
+
+  if (!error) return { data, error }
+
+  const msg = error.message?.toLowerCase() ?? ''
+
+  // 2. Email awaiting confirmation — advise user instead of looping
+  if (msg.includes('email not confirmed')) {
+    return { data: null, error: { message: 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.' } }
+  }
+
+  // 3. User doesn't exist yet — auto-register, then sign in
+  //    (handles first-run with no users in the Supabase project)
+  const isNotFound = msg.includes('invalid login') || msg.includes('user not found') || error.status === 400
+
+  if (isNotFound) {
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    })
+
+    if (signUpError) {
+      console.error('[auth] signUp:', signUpError.message)
+      return { data: null, error: signUpError }
+    }
+
+    // If Supabase returned a session right away (email confirmation disabled) sign in
+    if (signUpData?.session) return { data: signUpData, error: null }
+
+    // Otherwise email confirmation is required
+    return {
+      data: null,
+      error: { message: 'Conta criada! Confirme seu e-mail para acessar o sistema.' },
+    }
+  }
+
+  return { data: null, error }
 }
 
 export async function signOut() {
